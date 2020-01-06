@@ -8,6 +8,9 @@ import './utils/register-vant'
 
 // 加载全局样式
 import './styles/index.less'
+
+// 配置REM适配
+import 'amfe-flexible'
 Vue.config.productionTip = false
 
 new Vue({
