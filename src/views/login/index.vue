@@ -6,12 +6,12 @@
     <!-- ValidationProvider把需要校验的整个表单包起来 -->
     <!-- ValidationObserver把需要校验的具体表单元素包起来 -->
     <!-- 登录表单 -->
-    <ValidationObserver>
+    <ValidationObserver ref="loginForm">
       <van-cell-group>
         <validationProvider
           name="手机号"
-          rules="required|length:4"
-          v-slot="{errors}">
+          rules="required|length:11"
+          >
           <van-field
           clearable
           required
@@ -19,13 +19,13 @@
           label="手机号"
           placeholder="请输入手机号"
           />
-          <!-- 错误信息展示区域 -->
-          <span>{{errors[0]}}</span>
+          <!-- 错误信息展示区域,错误信息是一个数组，显示第一个错误信息就行 -->
+          <!-- <span>{{errors[0]}}</span> -->
         </validationProvider>
         <validationProvider
           name="验证码"
           rules="required|length:6"
-          v-slot="{errors}">
+          >
           <van-field
             required
             v-model="user.code"
@@ -38,7 +38,6 @@
             type="primary"
             >发送验证码</van-button>
           </van-field>
-          <span>{{errors[0]}}</span>
         </validationProvider>
       </van-cell-group>
     </ValidationObserver>
@@ -65,6 +64,17 @@ export default {
   methods: {
     async toLogin () {
       // const user = this.user
+      const success = await this.$refs.loginForm.validate()
+      if (!success) {
+        setTimeout(() => {
+          const errors = this.$refs.loginForm.errors
+          const item = Object.values(errors).find(item => {
+            return item[0]
+          })
+          this.$toast(item[0])
+        }, 100)
+        return
+      }
       this.$toast.loading({
         duration: 0,
         message: '登录中...',
