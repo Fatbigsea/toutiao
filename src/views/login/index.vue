@@ -32,10 +32,19 @@
             label="验证码"
             placeholder="请输入验证码"
           >
+          <van-count-down
+            :time="1000*60"
+            slot="button"
+            format="ss s"
+            v-if="isCountDownShow"
+            @finish="isCountDownShow=false"
+            />
             <van-button
+            v-else
             slot="button"
             size="small"
             type="primary"
+            @click="onSendSmsCode"
             >发送验证码</van-button>
           </van-field>
         </validationProvider>
@@ -49,7 +58,8 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, getSmsCode } from '@/api/user'
+import { validate } from 'vee-validate'
 
 export default {
   name: 'LoginPage',
@@ -58,7 +68,8 @@ export default {
       user: {
         code: '',
         mobile: ''
-      }
+      },
+      isCountDownShow: false
     }
   },
   methods: {
@@ -86,6 +97,27 @@ export default {
         this.$toast.success('登录成功')
       } catch (error) {
         this.$toast.fail('登录失败,手机号或验证码错误')
+      }
+    },
+    async onSendSmsCode () {
+      const { mobile } = this.user
+      const validateRes = await validate(mobile, 'required|mobile', {
+        name: '手机号'
+      })
+      if (!validateRes.valid) {
+        this.$toast(validateRes.errors[0])
+        return
+      }
+      try {
+        this.isCountDownShow = true
+        await getSmsCode(mobile)
+      } catch (error) {
+        this.isCountDownShow = false
+        if (error.response.status === 429) {
+          this.$toast('请勿频繁发送')
+          return
+        }
+        this.$toast('验证码发送失败')
       }
     }
   }
