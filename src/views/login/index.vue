@@ -14,11 +14,12 @@
           >
           <van-field
           clearable
-          required
           v-model="user.mobile"
           label="手机号"
           placeholder="请输入手机号"
-          />
+          >
+            <i class="iconfont icon-shouji" slot="left-icon"></i>
+          </van-field>
           <!-- 错误信息展示区域,错误信息是一个数组，显示第一个错误信息就行 -->
           <!-- <span>{{errors[0]}}</span> -->
         </validationProvider>
@@ -27,11 +28,11 @@
           rules="required|code"
           >
           <van-field
-            required
             v-model="user.code"
             label="验证码"
             placeholder="请输入验证码"
           >
+            <i class="iconfont icon-mima" slot="left-icon"></i>
           <van-count-down
             :time="1000*60"
             slot="button"
