@@ -10,7 +10,7 @@
       <van-cell-group>
         <validationProvider
           name="手机号"
-          rules="required|length:11"
+          rules="required|mobile"
           >
           <van-field
           clearable
@@ -24,7 +24,7 @@
         </validationProvider>
         <validationProvider
           name="验证码"
-          rules="required|length:6"
+          rules="required|code"
           >
           <van-field
             required
