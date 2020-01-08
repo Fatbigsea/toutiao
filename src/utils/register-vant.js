@@ -4,8 +4,8 @@ import {
   Icon,
   NavBar,
   Field,
-  CellGroup
-
+  CellGroup,
+  Toast
 } from 'vant'
 
 Vue.use(Button)
@@ -13,3 +13,4 @@ Vue.use(Button)
   .use(NavBar)
   .use(Field)
   .use(CellGroup)
+  .use(Toast)
