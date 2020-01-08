@@ -3,23 +3,45 @@
     <van-nav-bar
       title="登录"
     />
-    <van-cell-group>
-      <van-field
-        clearable
-        required
-        v-model="user.mobile"
-        label="手机号"
-        placeholder="请输入手机号"
-      />
-      <van-field
-        required
-        v-model="user.code"
-        label="验证码"
-        placeholder="请输入验证码"
-      >
-        <van-button slot="button" size="small" type="primary">发送验证码</van-button>
-      </van-field>
-    </van-cell-group>
+    <!-- ValidationProvider把需要校验的整个表单包起来 -->
+    <!-- ValidationObserver把需要校验的具体表单元素包起来 -->
+    <!-- 登录表单 -->
+    <ValidationObserver>
+      <van-cell-group>
+        <validationProvider
+          name="手机号"
+          rules="required|length:4"
+          v-slot="{errors}">
+          <van-field
+          clearable
+          required
+          v-model="user.mobile"
+          label="手机号"
+          placeholder="请输入手机号"
+          />
+          <!-- 错误信息展示区域 -->
+          <span>{{errors[0]}}</span>
+        </validationProvider>
+        <validationProvider
+          name="验证码"
+          rules="required|length:6"
+          v-slot="{errors}">
+          <van-field
+            required
+            v-model="user.code"
+            label="验证码"
+            placeholder="请输入验证码"
+          >
+            <van-button
+            slot="button"
+            size="small"
+            type="primary"
+            >发送验证码</van-button>
+          </van-field>
+          <span>{{errors[0]}}</span>
+        </validationProvider>
+      </van-cell-group>
+    </ValidationObserver>
 
     <div class="login-btn-box">
       <van-button type="info" @click="toLogin">登录</van-button>

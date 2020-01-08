@@ -5,6 +5,7 @@ const request = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/'
 })
 // 处理大数字类型
+// data是后端传递过来的数据
 request.defaults.transformResponse = [function (data) {
   try {
     return jsonBig.parse(data)

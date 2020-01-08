@@ -11,6 +11,8 @@ import './styles/index.less'
 
 // 配置REM适配
 import 'amfe-flexible'
+
+import './utils/validation'
 Vue.config.productionTip = false
 
 new Vue({
