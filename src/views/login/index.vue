@@ -94,7 +94,9 @@ export default {
       })
       try {
         // console.log(login())
-        await login(this.user)
+
+        const res = await login(this.user)
+        this.$store.commit('setUser', res.data.data)
         this.$toast.success('登录成功')
       } catch (error) {
         this.$toast.fail('登录失败,手机号或验证码错误')
@@ -122,7 +124,6 @@ export default {
       }
     }
   }
-
 }
 </script>
 
