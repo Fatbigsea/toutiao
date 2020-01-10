@@ -42,7 +42,7 @@
 
     <!-- 未登录状态开始 -->
     <div v-else>
-      <div class="nologin" >
+      <div class="nologin" @click="login" >
         <div class="nologin-img">
         </div>
       </div>
@@ -63,12 +63,44 @@
       <van-cell class="cell" title="系统设置" is-link  />
     </van-cell-group>
 
+     <van-cell-group v-if="$store.state.user">
+      <van-cell
+        style="text-align: center;marginTop:20px;"
+        title="退出登录"
+        @click="loginOut"
+        clickable
+      />
+    </van-cell-group>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'myPage'
+  name: 'myPage',
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    login () {
+      this.$router.push('/login')
+    },
+    loginOut () {
+      this.$dialog.confirm({
+        title: '标题',
+        message: '你是否确认退出？'
+      }).then(() => {
+        this.$store.commit('setUser', null)
+        // this.$router.push('/login')
+      // on confirm
+      }).catch(() => {
+      // on cancel
+        this.$toast('已取消退出')
+      })
+    }
+  }
 
 }
 </script>
@@ -139,15 +171,5 @@ export default {
 
   }
 }
-
-// .van-cell-group{
-//   width: 100%;
-//   height: 240px;
-//   display: flex;
-//   flex-direction: column;
-//   .cell{
-//     height: 48px;
-//   }
-// }
 
 </style>
