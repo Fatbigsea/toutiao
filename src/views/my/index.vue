@@ -1,5 +1,69 @@
 <template>
-  <div class="my-container"></div>
+  <div class="my-container">
+    <!-- 登录状态开始 -->
+    <div class="my-login" v-if="$store.state.user">
+      <div class="my-login-header">
+        <div class="my-login-img">
+          <van-image
+          class="img"
+          round
+          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          />
+          <div class="my-login-title">
+            <div class="title">胖大海</div>
+            <van-button round size="mini" class="btn">申请认证</van-button>
+          </div>
+        </div>
+        <van-grid :border="false" :column-num="3">
+          <van-grid-item>
+            <span class="count">123</span>
+            <span class="text">头条</span>
+          </van-grid-item>
+          <van-grid-item>
+            <span class="count">8</span>
+            <span class="text">粉丝</span>
+          </van-grid-item>
+          <van-grid-item>
+            <span class="count">88</span>
+            <span class="text">关注</span>
+          </van-grid-item>
+        </van-grid>
+      </div>
+      <van-grid clickable :column-num="3">
+        <van-grid-item icon="star-o" text="收藏">
+        </van-grid-item>
+        <van-grid-item icon="clock-o" text="历史">
+        </van-grid-item>
+        <van-grid-item icon="edit" text="作品">
+        </van-grid-item>
+      </van-grid>
+    </div>
+    <!-- 登录状态结束 -->
+
+    <!-- 未登录状态开始 -->
+    <div v-else>
+      <div class="nologin" >
+        <div class="nologin-img">
+        </div>
+      </div>
+      <van-grid clickable :column-num="2">
+        <van-grid-item icon="star-o" text="收藏">
+        </van-grid-item>
+        <van-grid-item icon="clock-o" text="历史">
+        </van-grid-item>
+      </van-grid>
+    </div>
+    <!-- 未登录状态结束 -->
+
+    <van-cell-group >
+      <van-cell class="cell" title="消息通知" is-link  />
+      <van-cell class="cell" title="实名认证" is-link  />
+      <van-cell class="cell" title="用户反馈" is-link  />
+      <van-cell class="cell" title="小智同学" is-link  />
+      <van-cell class="cell" title="系统设置" is-link  />
+    </van-cell-group>
+
+  </div>
 </template>
 
 <script>
@@ -9,6 +73,81 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.my-login{
+  .my-login-header{
+    position: relative;
+    width: 375px;
+    height: 200px;
+    background: url('./banner.png');
+    .my-login-img{
+      position: absolute;
+      width:160px;
+      height: 70px;
+      top: 50px;
+      left: 20px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      .img{
+        width: 70px;
+        height: 100%;
+      }
+      .my-login-title{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .title{
+          font-size: 16px;
+          color: #fff;
+          margin-bottom: 10px;
+        }
+        .btn{
+          width: 70px;
+          font-size: 10px;
+          color: #46a0fa;
+        }
+      }
+    }
+    .van-grid{
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      .van-grid-item{
+        ::v-deep .van-grid-item__content {
+        background: none;
+        color: #fff;
+        font-size: 14px;
+      }
+      }
+    }
+  }
+}
+
+.nologin{
+  display: flex;
+  width: 375px;
+  height: 200px;
+  background: url('./banner.png');
+  justify-content: center;
+  align-items: center;
+  .nologin-img{
+    width: 70px;
+    height: 70px;
+    background: url('./mobile.png') no-repeat;
+    background-size:cover;
+
+  }
+}
+
+// .van-cell-group{
+//   width: 100%;
+//   height: 240px;
+//   display: flex;
+//   flex-direction: column;
+//   .cell{
+//     height: 48px;
+//   }
+// }
 
 </style>
