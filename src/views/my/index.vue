@@ -7,25 +7,29 @@
           <van-image
           class="img"
           round
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="user.photo"
           />
           <div class="my-login-title">
-            <div class="title">胖大海</div>
+            <div class="title">{{user.name}}</div>
             <van-button round size="mini" class="btn">申请认证</van-button>
           </div>
         </div>
-        <van-grid :border="false" :column-num="3">
+        <van-grid :border="false" :column-num="4">
           <van-grid-item>
-            <span class="count">123</span>
+            <span class="count">{{user.art_count}}</span>
             <span class="text">头条</span>
           </van-grid-item>
           <van-grid-item>
-            <span class="count">8</span>
+            <span class="count">{{user.fans_count}}</span>
             <span class="text">粉丝</span>
           </van-grid-item>
           <van-grid-item>
-            <span class="count">88</span>
+            <span class="count">{{user.follow_count}}</span>
             <span class="text">关注</span>
+          </van-grid-item>
+          <van-grid-item>
+            <span class="count">{{user.like_count}}</span>
+            <span class="text">获赞</span>
           </van-grid-item>
         </van-grid>
       </div>
@@ -76,32 +80,50 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/api/user'
 export default {
   name: 'myPage',
   data () {
     return {
+      user: {}
 
     }
   },
   methods: {
+    // 获取用户信息
+    async getUser () {
+      try {
+        const { data } = await getUserInfo()
+        this.user = data.data
+        console.log(this.user)
+      } catch (error) {
+        this.$toast('获取用户信息失败')
+      }
+    },
+    // 点击登录
     login () {
       this.$router.push('/login')
     },
+    // 退出登录
     loginOut () {
       this.$dialog.confirm({
         title: '标题',
         message: '你是否确认退出？'
       }).then(() => {
         this.$store.commit('setUser', null)
-        // this.$router.push('/login')
+        this.$router.push('/login')
       // on confirm
       }).catch(() => {
       // on cancel
         this.$toast('已取消退出')
       })
     }
+  },
+  created () {
+    if (this.$store.state.user) {
+      this.getUser()
+    }
   }
-
 }
 </script>
 
