@@ -30,9 +30,9 @@
       <van-cell>
         <van-grid :gutter="10">
         <van-grid-item
-          v-for="value in 8"
-          :key="value"
-          text="文字"
+          v-for="channel in remainChannels"
+          :key="channel.id"
+          :text="channel.name"
         />
       </van-grid>
       </van-cell>
@@ -59,6 +59,17 @@ export default {
     async getAll () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
+    }
+  },
+  computed: {
+    remainChannels () {
+      const otherChannels = []
+      this.allChannels.forEach(item => {
+        if (!this.userChannel.find(my => my.id === item.id)) {
+          otherChannels.push(item)
+        }
+      })
+      return otherChannels
     }
   },
   created () {
