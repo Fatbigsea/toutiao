@@ -3,8 +3,7 @@
     <van-nav-bar title="首页" />
     <van-tabs v-model="activeName">
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
-        {{ item.name }}
-        <ArticleList :channel="channel"></ArticleList>
+        <ArticleList :channel="item"></ArticleList>
       </van-tab>
     </van-tabs>
   </div>
