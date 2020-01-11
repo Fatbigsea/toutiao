@@ -46,13 +46,13 @@ export default {
         with_top: 1
       })
       const resultHeader = data.data.results
-      console.log(resultHeader)
+      // console.log(resultHeader)
 
       setTimeout(() => {
         for (let i = 0; i < 10; i++) {
           this.list.unshift(...resultHeader)
         }
-        this.$toast('刷新成功')
+        this.$toast(`刷新成功${resultHeader.length}条新闻`)
         this.isLoading = false
       }, 1000)
     },
@@ -65,7 +65,7 @@ export default {
         with_top: 1
       })
       const result = data.data.results
-      console.log(result)
+      // console.log(result)
 
       // 异步更新数据
       setTimeout(() => {
