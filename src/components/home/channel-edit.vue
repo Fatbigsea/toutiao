@@ -8,8 +8,9 @@
           type="danger"
           round
           size="mini"
+          @click="isEditShow=!isEditShow"
           >
-          编辑
+          {{isEditShow?'完成':'编辑'}}
         </van-button>
       </van-cell>
       <van-cell>
@@ -18,7 +19,14 @@
           v-for="channel in userChannel"
           :key="channel.id"
           :text="channel.name"
-        />
+        >
+        <van-icon
+        class="close-icon"
+        slot="icon"
+        name="close"
+        v-if="isEditShow===true"
+        size="20"/>
+        </van-grid-item>
       </van-grid>
       </van-cell>
     </van-cell-group>
@@ -53,7 +61,8 @@ export default {
   },
   data () {
     return {
-      allChannels: []
+      allChannels: [],
+      isEditShow: false
     }
   },
   methods: {
@@ -86,6 +95,14 @@ export default {
 <style scoped lang="less">
   .van-cell-group{
     margin-top: 50px;
+  }
+  .van-cell__value{
+    padding-top: 10px;
+  }
+  ::v-deep .van-grid-item__icon-wrapper{
+    position: absolute;
+    top: -5px;
+    right: -5px;
   }
 
 </style>
