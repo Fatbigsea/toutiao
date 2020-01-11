@@ -5,11 +5,20 @@
       <van-icon
       name="wap-nav"
       slot="nav-right"
-      class="wap-nav" />
+      class="wap-nav"
+      @click="isPopupShow = true" />
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         <ArticleList :channel="item"></ArticleList>
       </van-tab>
     </van-tabs>
+    <van-popup
+      v-model="isPopupShow"
+      closeable
+      round
+      position="bottom"
+      :style="{ height: '95%' }"
+    />
+
   </div>
 </template>
 
@@ -21,7 +30,8 @@ export default {
   data () {
     return {
       activeName: 0,
-      channels: []
+      channels: [],
+      isPopupShow: false
     }
   },
   components: {
