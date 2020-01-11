@@ -4,6 +4,7 @@
     <van-tabs v-model="activeName">
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         {{ item.name }}
+        <ArticleList :channel="channel"></ArticleList>
       </van-tab>
     </van-tabs>
   </div>
@@ -11,6 +12,7 @@
 
 <script>
 import { getUserChannels } from '@/api/channel'
+import ArticleList from '@/components/home/article-list'
 export default {
   name: 'HomePage',
   data () {
@@ -18,6 +20,9 @@ export default {
       activeName: 0,
       channels: []
     }
+  },
+  components: {
+    ArticleList
   },
   methods: {
     // 获取用户频道列表

@@ -15,7 +15,8 @@ import {
   GridItem,
   Dialog,
   Tab,
-  Tabs
+  Tabs,
+  List
 } from 'vant'
 
 Vue.use(Button)
@@ -34,3 +35,4 @@ Vue.use(Button)
   .use(Dialog)
   .use(Tab)
   .use(Tabs)
+  .use(List)
