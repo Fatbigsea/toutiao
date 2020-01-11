@@ -17,7 +17,9 @@
       round
       position="bottom"
       :style="{ height: '95%' }"
-    />
+    >
+      <channel-edit></channel-edit>
+    </van-popup>
 
   </div>
 </template>
@@ -25,6 +27,7 @@
 <script>
 import { getUserChannels } from '@/api/channel'
 import ArticleList from '@/components/home/article-list'
+import ChannelEdit from '@/components/home/channel-edit'
 export default {
   name: 'HomePage',
   data () {
@@ -35,7 +38,8 @@ export default {
     }
   },
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   methods: {
     // 获取用户频道列表
