@@ -15,9 +15,9 @@
       <van-cell>
         <van-grid :gutter="10">
         <van-grid-item
-          v-for="value in 8"
-          :key="value"
-          text="文字"
+          v-for="channel in userChannel"
+          :key="channel.id"
+          :text="channel.name"
         />
       </van-grid>
       </van-cell>
@@ -41,8 +41,29 @@
 </template>
 
 <script>
+import { getAllChannels } from '@/api/channel'
 export default {
-  name: 'channelEdit'
+  name: 'channelEdit',
+  props: {
+    userChannel: {
+      type: Array,
+      required: true
+    }
+  },
+  data () {
+    return {
+      allChannels: []
+    }
+  },
+  methods: {
+    async getAll () {
+      const { data } = await getAllChannels()
+      this.allChannels = data.data.channels
+    }
+  },
+  created () {
+    this.getAll()
+  }
 
 }
 </script>
