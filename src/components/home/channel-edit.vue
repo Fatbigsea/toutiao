@@ -33,6 +33,7 @@
           v-for="channel in remainChannels"
           :key="channel.id"
           :text="channel.name"
+          @click="addChannel(channel)"
         />
       </van-grid>
       </van-cell>
@@ -59,6 +60,9 @@ export default {
     async getAll () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
+    },
+    addChannel (channel) {
+      this.userChannel.push(channel)
     }
   },
   computed: {
