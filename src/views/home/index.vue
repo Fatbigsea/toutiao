@@ -2,6 +2,10 @@
   <div class="home-container">
     <van-nav-bar title="首页" fixed/>
     <van-tabs v-model="activeName">
+      <van-icon
+      name="wap-nav"
+      slot="nav-right"
+      class="wap-nav" />
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         <ArticleList :channel="item"></ArticleList>
       </van-tab>
@@ -54,5 +58,11 @@ export default {
     right: 0;
     left: 0;
     z-index: 2;
+  }
+  .wap-nav{
+    position: fixed;
+    right: 0;
+    line-height: 44px;
+    background: #fff;
   }
 </style>
