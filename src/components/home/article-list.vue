@@ -40,7 +40,18 @@ export default {
   methods: {
     // 下拉刷新
     async onRefresh () {
+      const { data } = await getArticles({
+        channel_id: this.channel.id,
+        timestamp: Date.now(),
+        with_top: 1
+      })
+      const resultHeader = data.data.results
+      console.log(resultHeader)
+
       setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          this.list.unshift(...resultHeader)
+        }
         this.$toast('刷新成功')
         this.isLoading = false
       }, 1000)
