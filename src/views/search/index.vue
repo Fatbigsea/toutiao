@@ -11,33 +11,23 @@
       />
     </form>
 
-     <!-- 浏览历史 -->
-      <van-cell title="历史记录">
-        <van-icon
-          slot="right-icon"
-          name="delete"
-          style="line-height: inherit;"
-        />
-      </van-cell>
-      <van-cell-group>
-        <van-cell title="单元格">
-          <van-icon
-          slot="right-icon"
-          name="close"
-          style="line-height: inherit;"
+      <!-- 搜索内容列表 -->
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          v-if="isResultShow"
+        >
+          <van-cell
+            v-for="item in list"
+            :key="item"
+            :title="item"
           />
-        </van-cell>
-        <van-cell title="单元格">
-          <van-icon
-          slot="right-icon"
-          name="close"
-          style="line-height: inherit;"
-          />
-        </van-cell>
-      </van-cell-group>
+        </van-list>
 
        <!-- 搜索推荐 -->
-        <van-cell-group>
+        <van-cell-group v-else-if="value">
           <van-cell icon="search" title="单元格">
           </van-cell>
           <van-cell icon="search" title="单元格">
@@ -46,19 +36,31 @@
           </van-cell>
         </van-cell-group>
 
-        <!-- 搜索内容列表 -->
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <van-cell
-            v-for="item in list"
-            :key="item"
-            :title="item"
+             <!-- 浏览历史 -->
+        <van-cell-group v-else >
+          <van-cell title="历史记录" >
+          <van-icon
+            slot="right-icon"
+            name="delete"
+            style="line-height: inherit;"
           />
-        </van-list>
+          </van-cell>
+          <van-cell title="单元格">
+            <van-icon
+            slot="right-icon"
+            name="close"
+            style="line-height: inherit;"
+            />
+          </van-cell>
+          <van-cell title="单元格">
+            <van-icon
+            slot="right-icon"
+            name="close"
+            style="line-height: inherit;"
+            />
+          </van-cell>
+        </van-cell-group>
+
   </div>
 </template>
 
@@ -71,7 +73,8 @@ export default {
       value: '',
       list: [],
       loading: false,
-      finished: false
+      finished: false,
+      isResultShow: false
     }
   },
   methods: {
