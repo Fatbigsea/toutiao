@@ -9,23 +9,15 @@
         @search="onSearch"
         @cancel="onCancel"
         @input="onSug"
+        @focus="isResultShow=false"
       />
     </form>
 
       <!-- 搜索内容列表 -->
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
+        <search-result
           v-if="isResultShow"
-        >
-          <van-cell
-            v-for="item in list"
-            :key="item"
-            :title="item"
-          />
-        </van-list>
+          :q="value"
+        ></search-result>
 
        <!-- 搜索推荐 -->
         <van-cell-group v-else-if="value">
@@ -33,6 +25,7 @@
             icon="search"
             v-for="(item,index) in suggestion"
             :key="index"
+            @click="onSugClick(item)"
             >
             <div slot="title" v-html="highlight(item)"></div>
           </van-cell>
@@ -67,40 +60,26 @@
 </template>
 
 <script>
+import SearchResult from '@/components/search/search-result'
 import { getSuggestion } from '@/api/search'
 export default {
   name: 'SearchName',
   data () {
     return {
       value: '',
-      list: [],
-      loading: false,
-      finished: false,
       isResultShow: false,
       suggestion: []
     }
+  },
+  components: {
+    SearchResult
   },
   methods: {
     onCancel () {
       this.$router.push('/')
     },
     onSearch () {
-      console.log('search')
-    },
-    onLoad () {
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+      this.isResultShow = true
     },
     // 获取搜索推荐列表
     async onSug () {
@@ -116,6 +95,11 @@ export default {
       return str.toLowerCase().replace(this.value.toLowerCase(),
         `<span style="color:red;">${this.value}</span>`
       )
+    },
+    onSugClick (str) {
+      // 双向数据绑定，value变化，input监听到
+      this.value = str
+      this.isResultShow = true
     }
   }
 
