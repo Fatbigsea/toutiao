@@ -16,16 +16,17 @@
       <van-cell>
         <van-grid :gutter="10">
         <van-grid-item
-          v-for="channel in userChannel"
+          v-for="(channel,index) in userChannel"
           :key="channel.id"
           :text="channel.name"
+          @click="changeOrDel(index)"
         >
         <van-icon
         class="close-icon"
         slot="icon"
         name="close"
         v-if="isEditShow===true"
-        size="20"/>
+        size="24"/>
         </van-grid-item>
       </van-grid>
       </van-cell>
@@ -57,6 +58,10 @@ export default {
     userChannel: {
       type: Array,
       required: true
+    },
+    value: {
+      type: Number,
+      required: true
     }
   },
   data () {
@@ -72,6 +77,16 @@ export default {
     },
     addChannel (channel) {
       this.userChannel.push(channel)
+    },
+    changeOrDel (index) {
+      if (this.isEditShow) {
+        // 当isEditShow为true时编辑状态，是删除
+        this.userChannel.splice(index, 1)
+      } else {
+        // 不是编辑状态时，是跳转浏览
+        this.$emit('input', index)
+        this.$emit('close')
+      }
     }
   },
   computed: {
@@ -104,5 +119,7 @@ export default {
     top: -5px;
     right: -5px;
   }
-
+  .wap-nav{
+    font-size: 24px;
+  }
 </style>

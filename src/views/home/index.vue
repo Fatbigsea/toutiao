@@ -18,7 +18,11 @@
       position="bottom"
       :style="{ height: '95%' }"
     >
-      <channel-edit :user-channel="channels"></channel-edit>
+      <channel-edit
+      :user-channel="channels"
+      v-model="activeName"
+      @close="isPopupShow=false"
+      ></channel-edit>
     </van-popup>
 
   </div>
