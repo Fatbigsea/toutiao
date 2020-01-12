@@ -34,21 +34,28 @@
              <!-- 浏览历史 -->
         <van-cell-group v-else >
           <van-cell title="历史记录" >
-          <van-icon
-            slot="right-icon"
-            name="delete"
-            style="line-height: inherit;"
-          />
-          </van-cell>
-          <van-cell title="单元格">
+            <template v-if="isDeleteShow">
+            <span >取消删除</span>
+            &nbsp; &nbsp;
+            <span @click="isDeleteShow=false">完成</span>
+            </template>
             <van-icon
-            slot="right-icon"
-            name="close"
-            style="line-height: inherit;"
+              slot="right-icon"
+              name="delete"
+              style="line-height: inherit;"
+              @click="isDeleteShow=true"
+              v-else
             />
           </van-cell>
-          <van-cell title="单元格">
+          <van-cell
+           v-for="(item,index) in searchHistory"
+           :key="index"
+           :title="item"
+           icon="search"
+           @click="onHisClick(item)"
+           >
             <van-icon
+            v-show="isDeleteShow"
             slot="right-icon"
             name="close"
             style="line-height: inherit;"
@@ -61,14 +68,16 @@
 
 <script>
 import SearchResult from '@/components/search/search-result'
-import { getSuggestion } from '@/api/search'
+import { getSuggestion, getSearchHistories } from '@/api/search'
 export default {
   name: 'SearchName',
   data () {
     return {
       value: '',
       isResultShow: false,
-      suggestion: []
+      suggestion: [],
+      isDeleteShow: false,
+      searchHistory: []
     }
   },
   components: {
@@ -96,11 +105,26 @@ export default {
         `<span style="color:red;">${this.value}</span>`
       )
     },
+    // 点击推荐的搜索
     onSugClick (str) {
       // 双向数据绑定，value变化，input监听到
       this.value = str
       this.isResultShow = true
+    },
+    // 点击历史记录搜索
+    onHisClick (str) {
+      this.value = str
+      this.isResultShow = true
+    },
+    // 获取历史搜索
+    async getHistory () {
+      const { data } = await getSearchHistories()
+      this.searchHistory = data.data.keywords
+      console.log(this.searchHistory)
     }
+  },
+  created () {
+    this.getHistory()
   }
 
 }
