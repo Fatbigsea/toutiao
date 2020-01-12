@@ -18,9 +18,14 @@
         <van-grid-item
           v-for="(channel,index) in userChannel"
           :key="channel.id"
-          :text="channel.name"
           @click="changeOrDel(index)"
         >
+        <span
+          slot="text"
+          :class="{active : value === index}"
+          class="text"
+          >
+          {{channel.name}}</span>
         <van-icon
         class="close-icon"
         slot="icon"
@@ -121,5 +126,8 @@ export default {
   }
   .wap-nav{
     font-size: 24px;
+  }
+  .active{
+    color: red;
   }
 </style>
