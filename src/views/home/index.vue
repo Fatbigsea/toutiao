@@ -1,6 +1,17 @@
 <template>
   <div class="home-container">
-    <van-nav-bar title="首页" fixed/>
+    <van-nav-bar title="首页" fixed>
+      <van-button
+        slot="title"
+        round
+        size="small"
+        plain
+        type="info"
+        @click="$router.push('/search')"
+        >
+        搜索
+      </van-button>
+    </van-nav-bar>
     <van-tabs v-model="activeName">
       <van-icon
       name="wap-nav"
@@ -92,5 +103,12 @@ export default {
     right: 0;
     line-height: 44px;
     background: #fff;
+  }
+  .van-button{
+    background-color: #5babfb;
+    height:30px;
+    width: 100%;
+    color: #fff;
+    font-size: 16px;
   }
 </style>
