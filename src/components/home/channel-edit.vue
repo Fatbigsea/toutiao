@@ -25,7 +25,7 @@
         class="close-icon"
         slot="icon"
         name="close"
-        v-if="isEditShow===true"
+        v-if="isEditShow===true && index !== 0"
         size="24"/>
         </van-grid-item>
       </van-grid>
@@ -79,7 +79,7 @@ export default {
       this.userChannel.push(channel)
     },
     changeOrDel (index) {
-      if (this.isEditShow) {
+      if (this.isEditShow && index !== 0) {
         // 当isEditShow为true时编辑状态，是删除
         this.userChannel.splice(index, 1)
       } else {
