@@ -8,6 +8,7 @@
         show-action
         @search="onSearch"
         @cancel="onCancel"
+        @input="onSug"
       />
     </form>
 
@@ -28,11 +29,11 @@
 
        <!-- 搜索推荐 -->
         <van-cell-group v-else-if="value">
-          <van-cell icon="search" title="单元格">
-          </van-cell>
-          <van-cell icon="search" title="单元格">
-          </van-cell>
-          <van-cell icon="search" title="单元格">
+          <van-cell
+            icon="search"
+            v-for="(item,index) in suggestion"
+            :key="index"
+            :title="item">
           </van-cell>
         </van-cell-group>
 
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-
+import { getSuggestion } from '@/api/search'
 export default {
   name: 'SearchName',
   data () {
@@ -74,7 +75,8 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      isResultShow: false
+      isResultShow: false,
+      suggestion: []
     }
   },
   methods: {
@@ -98,6 +100,14 @@ export default {
           this.finished = true
         }
       }, 500)
+    },
+    async onSug () {
+      const searchText = this.value
+      if (!searchText) {
+        return
+      }
+      const { data } = await getSuggestion(searchText)
+      this.suggestion = data.data.options
     }
   }
 
