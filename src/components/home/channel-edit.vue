@@ -57,6 +57,7 @@
 
 <script>
 import { getAllChannels } from '@/api/channel'
+import { setItem } from '@/utils/storage'
 export default {
   name: 'channelEdit',
   props: {
@@ -103,6 +104,11 @@ export default {
         }
       })
       return otherChannels
+    }
+  },
+  watch: {
+    userChannel () {
+      setItem('user-channel', this.userChannel)
     }
   },
   created () {

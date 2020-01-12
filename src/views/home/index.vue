@@ -32,6 +32,7 @@
 import { getUserChannels } from '@/api/channel'
 import ArticleList from '@/components/home/article-list'
 import ChannelEdit from '@/components/home/channel-edit'
+import { getItem } from '@/utils/storage'
 export default {
   name: 'HomePage',
   data () {
@@ -48,13 +49,22 @@ export default {
   methods: {
     // 获取用户频道列表
     async getChannel () {
-      try {
+      // try {
+      //   const { data } = await getUserChannels()
+      //   this.channels = data.data.channels
+      //   console.log(this.channels)
+      // } catch (error) {
+      //   this.$toast('用户频道信息获取失败')
+      // }
+      let channels = []
+      const localUserChannles = getItem('user-channel')
+      if (localUserChannles) {
+        channels = localUserChannles
+      } else {
         const { data } = await getUserChannels()
-        this.channels = data.data.channels
-        console.log(this.channels)
-      } catch (error) {
-        this.$toast('用户频道信息获取失败')
+        channels = data.data.channels
       }
+      this.channels = channels
     }
   },
   created () {
