@@ -103,6 +103,7 @@ export default {
     right: 0;
     line-height: 44px;
     background: #fff;
+    font-size:24px;
   }
   .van-button{
     background-color: #5babfb;
