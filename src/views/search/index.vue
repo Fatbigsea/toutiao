@@ -33,7 +33,8 @@
             icon="search"
             v-for="(item,index) in suggestion"
             :key="index"
-            :title="item">
+            >
+            <div slot="title" v-html="highlight(item)"></div>
           </van-cell>
         </van-cell-group>
 
@@ -101,6 +102,7 @@ export default {
         }
       }, 500)
     },
+    // 获取搜索推荐列表
     async onSug () {
       const searchText = this.value
       if (!searchText) {
@@ -108,6 +110,12 @@ export default {
       }
       const { data } = await getSuggestion(searchText)
       this.suggestion = data.data.options
+    },
+    // 高亮显示
+    highlight (str) {
+      return str.toLowerCase().replace(this.value.toLowerCase(),
+        `<span style="color:red;">${this.value}</span>`
+      )
     }
   }
 
