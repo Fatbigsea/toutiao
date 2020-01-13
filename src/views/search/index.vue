@@ -51,16 +51,15 @@
            v-for="(item,index) in searchHistory"
            :key="index"
            icon="search"
-           @click="onHisClick(item,index)"
            >
-           <span  >{{item}}</span>
+           <span @click="onHisClick(item)">{{item}}</span>
             <van-icon
             v-show="isDeleteShow"
             slot="right-icon"
             name="close"
             style="line-height: inherit;"
+            @click="searchHistory.splice(index,1)"
             />
-            <!-- @click="searchHistory.splice(index,1)" -->
           </van-cell>
         </van-cell-group>
 
@@ -124,13 +123,13 @@ export default {
       this.isResultShow = true
     },
     // 点击历史记录搜索
-    onHisClick (str, index) {
-      if (this.isDeleteShow) {
-        this.searchHistory.splice(index, 1)
-      } else {
-        this.value = str
-        this.isResultShow = true
-      }
+    onHisClick (str) {
+      // if (this.isDeleteShow) {
+      //   this.searchHistory.splice(index, 1)
+      // } else {
+      this.value = str
+      this.isResultShow = true
+      // }
     }
     // 从后台接口获取历史搜索
     // async getHistory () {
