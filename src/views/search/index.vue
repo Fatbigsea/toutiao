@@ -35,7 +35,7 @@
         <van-cell-group v-else >
           <van-cell title="历史记录" >
             <template v-if="isDeleteShow">
-            <span >取消删除</span>
+            <span @click="searchHistory=[]" >全部删除</span>
             &nbsp; &nbsp;
             <span @click="isDeleteShow=false">完成</span>
             </template>
@@ -50,16 +50,17 @@
           <van-cell
            v-for="(item,index) in searchHistory"
            :key="index"
-           :title="item"
            icon="search"
-           @click="onHisClick(item)"
+           @click="onHisClick(item,index)"
            >
+           <span  >{{item}}</span>
             <van-icon
             v-show="isDeleteShow"
             slot="right-icon"
             name="close"
             style="line-height: inherit;"
             />
+            <!-- @click="searchHistory.splice(index,1)" -->
           </van-cell>
         </van-cell-group>
 
@@ -68,7 +69,8 @@
 
 <script>
 import SearchResult from '@/components/search/search-result'
-import { getSuggestion, getSearchHistories } from '@/api/search'
+import { getSuggestion } from '@/api/search'
+import { setItem, getItem } from '@/utils/storage'
 export default {
   name: 'SearchName',
   data () {
@@ -77,17 +79,27 @@ export default {
       isResultShow: false,
       suggestion: [],
       isDeleteShow: false,
-      searchHistory: []
+      searchHistory: getItem('search-history') || []
     }
   },
   components: {
     SearchResult
+  },
+  watch: {
+    searchHistory (newVal) {
+      setItem('search-history', newVal)
+    }
   },
   methods: {
     onCancel () {
       this.$router.push('/')
     },
     onSearch () {
+      const index = this.searchHistory.indexOf(this.value)
+      if (index !== -1) {
+        this.searchHistory.splice(index, 1)
+      }
+      this.searchHistory.unshift(this.value)
       this.isResultShow = true
     },
     // 获取搜索推荐列表
@@ -112,20 +124,24 @@ export default {
       this.isResultShow = true
     },
     // 点击历史记录搜索
-    onHisClick (str) {
-      this.value = str
-      this.isResultShow = true
-    },
-    // 获取历史搜索
-    async getHistory () {
-      const { data } = await getSearchHistories()
-      this.searchHistory = data.data.keywords
-      console.log(this.searchHistory)
+    onHisClick (str, index) {
+      if (this.isDeleteShow) {
+        this.searchHistory.splice(index, 1)
+      } else {
+        this.value = str
+        this.isResultShow = true
+      }
     }
-  },
-  created () {
-    this.getHistory()
+    // 从后台接口获取历史搜索
+    // async getHistory () {
+    //   const { data } = await getSearchHistories()
+    //   this.searchHistory = data.data.keywords
+    //   // console.log(this.searchHistory)
+    // }
   }
+  // created () {
+  //   this.getHistory()
+  // }
 
 }
 </script>
