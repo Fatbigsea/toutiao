@@ -70,6 +70,7 @@
 import SearchResult from '@/components/search/search-result'
 import { getSuggestion } from '@/api/search'
 import { setItem, getItem } from '@/utils/storage'
+import { debounce } from 'lodash'
 export default {
   name: 'SearchName',
   data () {
@@ -101,15 +102,24 @@ export default {
       this.searchHistory.unshift(this.value)
       this.isResultShow = true
     },
-    // 获取搜索推荐列表
-    async onSug () {
+    // 加入函数防抖获取搜索推荐列表
+    onSug: debounce(async function () {
       const searchText = this.value
       if (!searchText) {
         return
       }
       const { data } = await getSuggestion(searchText)
       this.suggestion = data.data.options
-    },
+    }, 400),
+    // 获取搜索推荐列表
+    // async onSug () {
+    //   const searchText = this.value
+    //   if (!searchText) {
+    //     return
+    //   }
+    //   const { data } = await getSuggestion(searchText)
+    //   this.suggestion = data.data.options
+    // },
     // 高亮显示
     highlight (str) {
       return str.toLowerCase().replace(this.value.toLowerCase(),
