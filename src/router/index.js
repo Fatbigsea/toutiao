@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/login'
-import Search from '@/views/search'
 
 Vue.use(VueRouter)
 
@@ -32,10 +31,17 @@ const routes = [
   },
   {
     path: '/login',
+    name: 'login',
     component: Login
   }, {
     path: '/search',
-    component: Search
+    name: 'search',
+    component: () => import('@/views/search')
+  }, {
+    path: '/article/:articleId',
+    name: 'article',
+    component: () => import('@/views/article'),
+    props: true
   }
 ]
 
