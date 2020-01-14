@@ -11,6 +11,7 @@
 
     <!-- 加载中 -->
     <van-loading
+      v-if="isLoading"
       size="24px"
       vertical
       color="#1989fa"
@@ -18,7 +19,7 @@
     </van-loading>
 
     <!-- 文章详情页 -->
-    <div class="article-content" >
+    <div class="article-content"  v-else-if="article.title">
       <h3 class="title">{{article.title}}</h3>
       <div class="content">
         <van-image
@@ -37,13 +38,14 @@
     </div>
 
     <!-- 加载失败提醒 -->
-    <div class="error">
+    <div class="error" v-else>
       <img src="./no-network.png" alt="no-network">
       <p class="text">亲，网络不给力哦~</p>
       <van-button
         class="btn"
         type="default"
         size="small"
+        @click="getArticle"
       >点击重试</van-button>
     </div>
 
@@ -53,8 +55,8 @@
         <van-button round size="small">写评论</van-button>
       </van-tabbar-item>
       <van-tabbar-item icon="comment-o"></van-tabbar-item>
-      <van-tabbar-item icon="star-o"></van-tabbar-item>
-      <van-tabbar-item icon="good-job-o"></van-tabbar-item>
+      <van-tabbar-item class="start" icon="star-o"></van-tabbar-item>
+      <van-tabbar-item class="good" icon="good-job-o"></van-tabbar-item>
       <van-tabbar-item icon="share"></van-tabbar-item>
     </van-tabbar>
   </div>
@@ -73,13 +75,19 @@ export default {
   },
   data () {
     return {
-      article: {}
+      article: {},
+      isLoading: true
     }
   },
   methods: {
     async getArticle () {
-      const { data } = await getArticlesById(this.articleId)
-      this.article = data.data
+      this.isLoading = true
+      try {
+        const { data } = await getArticlesById(this.articleId)
+        this.article = data.data
+      } catch (error) {
+      }
+      this.isLoading = false
     }
   },
   created () {
@@ -116,7 +124,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         height: 40px;
-        margin: 30px 0 40px;
+        margin: 30px 0;
         .img{
           width: 60px;
           height: 60px;
@@ -158,6 +166,8 @@ export default {
   .van-hairline--top-bottom{
     position: fixed;
     border-top:1px solid #ccc;
+    display: flex;
+    align-items: center;
       .article-commit{
       ::v-deep .van-tabbar-item__text{
         display: flex;
@@ -169,9 +179,15 @@ export default {
         }
       }
     }
-  }
-
-  ::v-deep .van-nav-bar__text ,.van-icon{
-    color: #fff;
+    .start{
+      ::v-deep .van-icon{
+        color:orange;
+      }
+    }
+    .good{
+      ::v-deep .van-icon{
+        color:red;
+      }
+    }
   }
 </style>
