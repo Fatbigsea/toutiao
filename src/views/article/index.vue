@@ -60,7 +60,11 @@
         @click="isCollect"
         :icon="article.is_collected? 'star':'star-o'">
       </van-tabbar-item>
-      <van-tabbar-item class="good" icon="good-job-o"></van-tabbar-item>
+      <van-tabbar-item
+        class="good"
+        :icon="article.attitude===1 ?'good-job': 'good-job-o'"
+        @click="isLike"
+        ></van-tabbar-item>
       <van-tabbar-item icon="share"></van-tabbar-item>
     </van-tabbar>
   </div>
@@ -71,7 +75,9 @@ import './github-markdown.css'
 import {
   getArticlesById,
   addCollection,
-  deleteCollection
+  deleteCollection,
+  addLike,
+  deleteLike
 } from '@/api/article'
 export default {
   name: 'ArticlePage',
@@ -110,6 +116,22 @@ export default {
           await addCollection(this.articleId)
           this.article.is_collected = true
           this.$toast('收藏成功')
+        }
+      } catch (error) {
+        this.$toast.fail('操作失败')
+      }
+    },
+    // 是否点赞
+    async isLike () {
+      try {
+        if (this.article.attitude === -1) {
+          await addLike(this.articleId)
+          this.article.attitude = 1
+          this.$toast('点赞成功')
+        } else if (this.article.attitude === 1) {
+          await deleteLike(this.articleId)
+          this.article.attitude = -1
+          this.$toast('取消点赞')
         }
       } catch (error) {
         this.$toast.fail('操作失败')
