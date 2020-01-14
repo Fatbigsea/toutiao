@@ -19,26 +19,21 @@
 
     <!-- 文章详情页 -->
     <div class="article-content" >
-      <h3 class="title">哈哈哈</h3>
+      <h3 class="title">{{article.title}}</h3>
       <div class="content">
         <van-image
           class="img"
           round
           fit="cover"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="article.aut_photo"
           />
         <div class="text">
-          <p class="name">哈哈啊哈哈哈哈哈哈哈哈哈</p>
-          <p class="time">几天前</p>
+          <p class="name">{{article.aut_name}}</p>
+          <p class="time">{{article.pubdate}}</p>
         </div>
         <van-button type="info" round size="small">+ 关注 </van-button>
       </div>
-      <div class="markdown-body">
-        <p></p>
-        <p>哈哈哈哈哈哈哈哈哈</p>
-        <p>哈哈哈哈哈哈哈哈哈</p>
-        <p>哈哈哈哈哈哈哈哈哈</p>
-      </div>
+      <div class="markdown-body" v-html="article.content"></div>
     </div>
 
     <!-- 加载失败提醒 -->
@@ -67,13 +62,28 @@
 
 <script>
 import './github-markdown.css'
+import { getArticlesById } from '@/api/article'
 export default {
   name: 'ArticlePage',
   props: {
     articleId: {
-      type: [Object, Number, String],
+      type: String,
       required: true
     }
+  },
+  data () {
+    return {
+      article: {}
+    }
+  },
+  methods: {
+    async getArticle () {
+      const { data } = await getArticlesById(this.articleId)
+      this.article = data.data
+    }
+  },
+  created () {
+    this.getArticle()
   }
 }
 
@@ -106,6 +116,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         height: 40px;
+        margin: 30px 0 40px;
         .img{
           width: 60px;
           height: 60px;
