@@ -55,7 +55,11 @@
         <van-button round size="small">写评论</van-button>
       </van-tabbar-item>
       <van-tabbar-item icon="comment-o"></van-tabbar-item>
-      <van-tabbar-item class="start" icon="star-o"></van-tabbar-item>
+      <van-tabbar-item
+        class="start"
+        @click="isCollect"
+        :icon="article.is_collected? 'star':'star-o'">
+      </van-tabbar-item>
       <van-tabbar-item class="good" icon="good-job-o"></van-tabbar-item>
       <van-tabbar-item icon="share"></van-tabbar-item>
     </van-tabbar>
@@ -64,7 +68,11 @@
 
 <script>
 import './github-markdown.css'
-import { getArticlesById } from '@/api/article'
+import {
+  getArticlesById,
+  addCollection,
+  deleteCollection
+} from '@/api/article'
 export default {
   name: 'ArticlePage',
   props: {
@@ -80,14 +88,32 @@ export default {
     }
   },
   methods: {
+    // 获取文章详情
     async getArticle () {
       this.isLoading = true
       try {
         const { data } = await getArticlesById(this.articleId)
         this.article = data.data
+        console.log(this.article)
       } catch (error) {
       }
       this.isLoading = false
+    },
+    // 是否收藏
+    async isCollect () {
+      try {
+        if (this.article.is_collected) {
+          await deleteCollection(this.articleId)
+          this.article.is_collected = false
+          this.$toast('取消收藏')
+        } else {
+          await addCollection(this.articleId)
+          this.article.is_collected = true
+          this.$toast('收藏成功')
+        }
+      } catch (error) {
+        this.$toast.fail('操作失败')
+      }
     }
   },
   created () {
