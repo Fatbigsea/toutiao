@@ -32,7 +32,11 @@
           <p class="name">{{article.aut_name}}</p>
           <p class="time">{{article.pubdate}}</p>
         </div>
-        <van-button type="info" round size="small">+ 关注 </van-button>
+        <van-button
+          :type="article.is_followed?'default':'info'"
+          round
+          size="small"
+          @click="isFollow">{{article.is_followed?'已关注':'+ 关注'}} </van-button>
       </div>
       <div class="markdown-body" v-html="article.content"></div>
     </div>
@@ -79,6 +83,8 @@ import {
   addLike,
   deleteLike
 } from '@/api/article'
+
+// import { addFollow, deleteFollow } from '@/api/user'
 export default {
   name: 'ArticlePage',
   props: {
@@ -137,6 +143,22 @@ export default {
         this.$toast.fail('操作失败')
       }
     }
+    // 是否关注
+    // async isFollow () {
+    //   try {
+    //     if (this.article.is_followed) {
+    //       await deleteFollow(this.articleId)
+    //       this.article.is_followed = false
+    //       this.$toast('取消关注')
+    //     } else {
+    //       await addFollow(this.articleId)
+    //       this.article.is_followed = true
+    //       this.$toast('关注成功')
+    //     }
+    //   } catch (error) {
+    //     this.$toast.fail('操作失败')
+    //   }
+    // }
   },
   created () {
     this.getArticle()
