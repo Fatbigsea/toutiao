@@ -30,7 +30,7 @@
           />
         <div class="text">
           <p class="name">{{article.aut_name}}</p>
-          <p class="time">{{article.pubdate}}</p>
+          <p class="time">{{article.pubdate | relativeTime}}</p>
         </div>
         <van-button
           v-if="!$store.state.user || article.aut_id!==$store.state.user.id"
@@ -38,7 +38,9 @@
           round
           size="small"
           :loading="isLoadingFollow"
-          @click="isFollow">{{article.is_followed?'已关注':'+ 关注'}} </van-button>
+          @click="isFollow">
+          {{article.is_followed?'已关注':'+ 关注'}}
+        </van-button>
       </div>
       <div class="markdown-body" v-html="article.content"></div>
     </div>
@@ -70,7 +72,8 @@
         class="good"
         :icon="article.attitude===1 ?'good-job': 'good-job-o'"
         @click="isLike"
-        ></van-tabbar-item>
+        >
+      </van-tabbar-item>
       <van-tabbar-item icon="share"></van-tabbar-item>
     </van-tabbar>
   </div>
@@ -85,8 +88,8 @@ import {
   addLike,
   deleteLike
 } from '@/api/article'
-
 import { addFollow, deleteFollow } from '@/api/user'
+
 export default {
   name: 'ArticlePage',
   props: {
@@ -111,6 +114,7 @@ export default {
         this.article = data.data
         console.log(this.article)
       } catch (error) {
+
       }
       this.isLoading = false
     },
