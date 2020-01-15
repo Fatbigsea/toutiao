@@ -33,9 +33,11 @@
           <p class="time">{{article.pubdate}}</p>
         </div>
         <van-button
+          v-if="!$store.state.user || article.aut_id!==$store.state.user.id"
           :type="article.is_followed?'default':'info'"
           round
           size="small"
+          :loading="isLoadingFollow"
           @click="isFollow">{{article.is_followed?'已关注':'+ 关注'}} </van-button>
       </div>
       <div class="markdown-body" v-html="article.content"></div>
@@ -84,7 +86,7 @@ import {
   deleteLike
 } from '@/api/article'
 
-// import { addFollow, deleteFollow } from '@/api/user'
+import { addFollow, deleteFollow } from '@/api/user'
 export default {
   name: 'ArticlePage',
   props: {
@@ -96,7 +98,8 @@ export default {
   data () {
     return {
       article: {},
-      isLoading: true
+      isLoading: true,
+      isLoadingFollow: false
     }
   },
   methods: {
@@ -142,23 +145,26 @@ export default {
       } catch (error) {
         this.$toast.fail('操作失败')
       }
-    }
+    },
     // 是否关注
-    // async isFollow () {
-    //   try {
-    //     if (this.article.is_followed) {
-    //       await deleteFollow(this.articleId)
-    //       this.article.is_followed = false
-    //       this.$toast('取消关注')
-    //     } else {
-    //       await addFollow(this.articleId)
-    //       this.article.is_followed = true
-    //       this.$toast('关注成功')
-    //     }
-    //   } catch (error) {
-    //     this.$toast.fail('操作失败')
-    //   }
-    // }
+    async isFollow () {
+      this.isLoadingFollow = true
+      const userId = this.article.aut_id
+      try {
+        if (this.article.is_followed) {
+          await deleteFollow(userId)
+          this.article.is_followed = false
+          this.$toast('取消关注')
+        } else {
+          await addFollow(userId)
+          this.article.is_followed = true
+          this.$toast('关注成功')
+        }
+      } catch (error) {
+        this.$toast.fail('操作失败')
+      }
+      this.isLoadingFollow = false
+    }
   },
   created () {
     this.getArticle()
