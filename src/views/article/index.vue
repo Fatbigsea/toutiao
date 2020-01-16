@@ -277,7 +277,9 @@ export default {
           }
         }
         .van-button{
+          position: absolute;
           width: 85px;
+          right: 30px;
         }
       }
     }

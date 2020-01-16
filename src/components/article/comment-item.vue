@@ -14,15 +14,18 @@
       <div slot="label">
         <p style="color:#363636">{{comment.content}}</p>
         <p>
-          <span style="margin-right:10px;">{{comment.pubdate}}</span>
+          <span style="margin-right:10px;">{{comment.pubdate | relativeTime}}</span>
           <van-button
             size="mini"
-          >回复</van-button>
+          >回复{{comment.reply_count}}
+          </van-button>
         </p>
       </div>
       <div slot="right-icon" class="like-container">
-        <van-icon name="good-job-o" />
-        <span>赞</span>
+        <van-icon
+          :color="comment.is_liking?'#e5645f' : ''"
+          :name="comment.is_liking?'good-job':'good-job-o'" />
+        <span>{{comment.is_liking?'':'赞'}}</span>
       </div>
     </van-cell>
 </template>
