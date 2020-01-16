@@ -77,7 +77,11 @@
       round
       position="bottom"
     >
-      <post-comment/>
+      <!-- 写评论组件 -->
+      <post-comment
+      :articleComment="articleComment"
+      :popupShow="isPopupShow"
+      />
     </van-popup>
     <!-- 底部标签栏 -->
     <van-tabbar>
