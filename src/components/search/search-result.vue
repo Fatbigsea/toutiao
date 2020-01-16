@@ -11,6 +11,7 @@
         v-for="(item,index) in list"
         :key="index"
         :title="item.title"
+        @click="addClick(item.art_id)"
       />
     </van-list>
   </div>
@@ -56,6 +57,9 @@ export default {
       } else {
         this.finished = true
       }
+    },
+    addClick (item) {
+      this.$router.push(`/article/${item}`)
     }
   }
 

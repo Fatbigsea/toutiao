@@ -3,7 +3,6 @@
     <!-- 头部导航栏 -->
     <van-nav-bar
       title="文章详情"
-      left-text="返回"
       left-arrow
       @click-left="$router.back()"
     >
@@ -57,12 +56,28 @@
       >点击重试</van-button>
     </div>
 
+    <van-divider>正文结束</van-divider>
+     <!-- 评论列表 -->
+    <van-list
+      v-model="articleComment.loading"
+      :finished="articleComment.finished"
+      finished-text="没有更多评论了"
+      @load="onLoad"
+      >
+      <comment-item
+        v-for="(comment,index) in articleComment.list"
+        :key="index"
+        :comment="comment"
+      />
+    </van-list>
+
     <!-- 底部标签栏 -->
     <van-tabbar>
       <van-tabbar-item class="article-commit">
         <van-button round size="small">写评论</van-button>
       </van-tabbar-item>
-      <van-tabbar-item icon="comment-o"></van-tabbar-item>
+      <van-tabbar-item icon="comment-o" :info="articleComment.totalCount">
+      </van-tabbar-item>
       <van-tabbar-item
         class="start"
         @click="isCollect"
@@ -89,6 +104,8 @@ import {
   deleteLike
 } from '@/api/article'
 import { addFollow, deleteFollow } from '@/api/user'
+import CommentItem from '@/components/article/comment-item'
+import { getComments } from '@/api/comment'
 
 export default {
   name: 'ArticlePage',
@@ -98,21 +115,56 @@ export default {
       required: true
     }
   },
+  components: {
+    CommentItem
+  },
   data () {
     return {
       article: {},
       isLoading: true,
-      isLoadingFollow: false
+      isLoadingFollow: false,
+      articleComment: {
+        list: [],
+        loading: false,
+        finished: false,
+        offset: null,
+        totalCount: 0
+      }
     }
   },
   methods: {
+    // 获取文章评论
+    async onLoad () {
+      // 获取数据
+      const { data } = await getComments({
+        type: 'a',
+        source: this.articleId,
+        offset: this.articleComment.offset,
+        limit: 10
+      })
+
+      // 将数据添加到列表中
+      const { results } = data.data
+      this.articleComment.list.push(...results)
+      // 更新总数据条数
+      this.articleComment.totalCount = data.data.total_count
+
+      // 加载状态结束
+      this.articleComment.loading = false
+
+      // 判断数据是否全部加载完成
+      if (results.length) {
+        this.articleComment.offset = data.data.last_id
+      } else {
+        this.articleComment.finished = true
+      }
+    },
     // 获取文章详情
     async getArticle () {
       this.isLoading = true
       try {
         const { data } = await getArticlesById(this.articleId)
         this.article = data.data
-        console.log(this.article)
       } catch (error) {
 
       }
@@ -201,7 +253,7 @@ export default {
       }
       .content{
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         height: 40px;
         margin: 30px 0;
