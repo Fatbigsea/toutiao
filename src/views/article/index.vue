@@ -71,10 +71,24 @@
       />
     </van-list>
 
+    <!-- 评论弹窗 -->
+    <van-popup
+      v-model="isPopupShow"
+      round
+      position="bottom"
+    >
+      <post-comment/>
+    </van-popup>
     <!-- 底部标签栏 -->
     <van-tabbar>
       <van-tabbar-item class="article-commit">
-        <van-button round size="small">写评论</van-button>
+        <van-button
+          round
+          size="small"
+          @click="isPopupShow=true"
+        >
+          写评论
+        </van-button>
       </van-tabbar-item>
       <van-tabbar-item icon="comment-o" :info="articleComment.totalCount">
       </van-tabbar-item>
@@ -105,6 +119,7 @@ import {
 } from '@/api/article'
 import { addFollow, deleteFollow } from '@/api/user'
 import CommentItem from '@/components/article/comment-item'
+import PostComment from '@/components/article/post-comment'
 import { getComments } from '@/api/comment'
 
 export default {
@@ -116,7 +131,8 @@ export default {
     }
   },
   components: {
-    CommentItem
+    CommentItem,
+    PostComment
   },
   data () {
     return {
@@ -129,7 +145,8 @@ export default {
         finished: false,
         offset: null,
         totalCount: 0
-      }
+      },
+      isPopupShow: false
     }
   },
   methods: {
