@@ -68,6 +68,7 @@
         v-for="(comment,index) in articleComment.list"
         :key="index"
         :comment="comment"
+        @click-close="isPopupShow=false"
       />
     </van-list>
 
@@ -81,8 +82,18 @@
       <post-comment
       :articleComment="articleComment"
       :popupShow="isPopupShow"
+      @click-close="isPopupShow=false"
       />
     </van-popup>
+
+    <!-- 回复弹窗 -->
+    <van-popup
+      v-model="isReplyShow"
+      round
+      position="bottom"
+      :style="{ height: '80%' }"
+    />
+
     <!-- 底部标签栏 -->
     <van-tabbar>
       <van-tabbar-item class="article-commit">
@@ -150,7 +161,8 @@ export default {
         offset: null,
         totalCount: 0
       },
-      isPopupShow: false
+      isPopupShow: false,
+      isReplyShow: false
     }
   },
   methods: {

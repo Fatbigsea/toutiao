@@ -17,6 +17,7 @@
           <span style="margin-right:10px;">{{comment.pubdate | relativeTime}}</span>
           <van-button
             size="mini"
+            @click="$emit('click-reply')"
           >回复{{comment.reply_count}}
           </van-button>
         </p>

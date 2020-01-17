@@ -33,12 +33,7 @@ export default {
     articleComment: {
       type: Object,
       required: true
-    },
-    popupShow: {
-      type: Boolean,
-      required: true
     }
-
   },
   methods: {
     async inputComment () {
@@ -50,8 +45,7 @@ export default {
         content: this.inputMessage
       })
 
-      this.popupShow = false
-
+      this.$emit('click-close')
       this.articleComment.list.unshift(data.data.new_obj)
 
       this.articleComment.totalCount++
