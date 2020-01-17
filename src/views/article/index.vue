@@ -68,7 +68,7 @@
         v-for="(comment,index) in articleComment.list"
         :key="index"
         :comment="comment"
-        @click-close="isPopupShow=false"
+        @click-reply="onReplyShow"
       />
     </van-list>
 
@@ -92,7 +92,11 @@
       round
       position="bottom"
       :style="{ height: '80%' }"
-    />
+      @click-reply="isReplyShow=true"
+      @click-close="isReplyShow=false"
+    >
+      <comment-reply :comment="curComment" />
+    </van-popup>
 
     <!-- 底部标签栏 -->
     <van-tabbar>
@@ -135,6 +139,7 @@ import {
 import { addFollow, deleteFollow } from '@/api/user'
 import CommentItem from '@/components/article/comment-item'
 import PostComment from '@/components/article/post-comment'
+import CommentReply from '@/components/article/comment-reply'
 import { getComments } from '@/api/comment'
 
 export default {
@@ -147,7 +152,8 @@ export default {
   },
   components: {
     CommentItem,
-    PostComment
+    PostComment,
+    CommentReply
   },
   data () {
     return {
@@ -162,7 +168,8 @@ export default {
         totalCount: 0
       },
       isPopupShow: false,
-      isReplyShow: false
+      isReplyShow: false,
+      curComment: {}
     }
   },
   methods: {
@@ -253,6 +260,10 @@ export default {
         this.$toast.fail('操作失败')
       }
       this.isLoadingFollow = false
+    },
+    async onReplyShow (comment) {
+      this.curComment = comment
+      this.isReplyShow = true
     }
   },
   created () {

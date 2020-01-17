@@ -46,6 +46,7 @@ export default {
       })
 
       this.$emit('click-close')
+
       this.articleComment.list.unshift(data.data.new_obj)
 
       this.articleComment.totalCount++
