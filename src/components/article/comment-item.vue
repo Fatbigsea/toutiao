@@ -23,6 +23,7 @@
       </div>
       <div slot="right-icon" class="like-container">
         <van-icon
+          @click="isLike"
           :color="comment.is_liking?'#e5645f' : ''"
           :name="comment.is_liking?'good-job':'good-job-o'" />
         <span>{{comment.is_liking?'':'赞'}}</span>
@@ -31,12 +32,30 @@
 </template>
 
 <script>
+import { addCommentLike, deleteCommentLike } from '@/api/comment'
 export default {
   name: 'CommentItem',
   props: {
     comment: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    async isLike () {
+      // 评论点赞参数错误
+      try {
+        if (this.comment.is_liking) {
+          await deleteCommentLike(this.comment.com_id.toString())
+          this.$toast('取消点赞')
+        } else {
+          await addCommentLike(this.comment.com_id.toString())
+          this.$toast('点赞成功')
+        }
+        this.comment.is_liking = !this.comment.is_liking
+      } catch (error) {
+        this.$toast.fail('操作失败')
+      }
     }
   }
 

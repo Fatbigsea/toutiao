@@ -17,3 +17,22 @@ export const addComments = data => {
     data
   })
 }
+
+// 对评论点赞
+export const addCommentLike = target => {
+  return request({
+    method: 'post',
+    url: '/app/v1_0/comment/likings',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消对评论的点赞
+export const deleteCommentLike = target => {
+  return request({
+    method: 'delete',
+    url: `/app/v1_0/comment/likings/${target}`
+  })
+}
