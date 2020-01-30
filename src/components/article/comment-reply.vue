@@ -64,7 +64,7 @@ export default {
 
       this.list.push(...results)
 
-      console.log(this.list)
+      // console.log(this.list)
 
       // 加载状态结束
       this.loading = false

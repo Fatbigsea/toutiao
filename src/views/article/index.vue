@@ -95,7 +95,7 @@
       @click-reply="isReplyShow=true"
       @click-close="isReplyShow=false"
     >
-      <comment-reply :comment="curComment" />
+      <comment-reply :comment="curComment" v-if="isReplyShow" />
     </van-popup>
 
     <!-- 底部标签栏 -->
