@@ -5,6 +5,7 @@
       v-model="inputMessage"
       rows="2"
       autosize
+      @input="$emit('input',$event)"
       type="textarea"
       maxlength="50"
       placeholder="请输入文明评论"
@@ -13,14 +14,13 @@
     <van-button
       type="info"
       size="small"
-      @click="inputComment"
+      @click="$emit('click-post',inputMessage)"
     >发布</van-button>
-
   </div>
 </template>
 
 <script>
-import { addComments } from '@/api/comment'
+// import { addComments } from '@/api/comment'
 export default {
   name: 'PostComment',
   data () {
@@ -30,29 +30,30 @@ export default {
     }
   },
   props: {
-    articleComment: {
-      type: Object,
-      required: true
-    }
+    // articleComment: {
+    //   type: Object,
+    //   required: true
+    // }
   },
   methods: {
-    async inputComment () {
-      if (!this.inputMessage.length) {
-        return
-      }
-      const { data } = await addComments({
-        target: this.$route.params.articleId,
-        content: this.inputMessage
-      })
+    // async inputComment () {
+    //   const articleComment = this.articleComment
+    //   if (!this.inputMessage.length) {
+    //     return
+    //   }
+    //   const { data } = await addComments({
+    //     target: this.$route.params.articleId,
+    //     content: this.inputMessage
+    //   })
 
-      this.$emit('click-close')
+    //   this.$emit('click-close')
 
-      this.articleComment.list.unshift(data.data.new_obj)
+    //   articleComment.list.unshift(data.data.new_obj)
 
-      this.articleComment.totalCount++
+    //   articleComment.totalCount++
 
-      this.inputMessage = ''
-    }
+    //   this.inputMessage = ''
+    // }
 
   }
 

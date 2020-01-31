@@ -82,7 +82,7 @@
       <post-comment
       :articleComment="articleComment"
       :popupShow="isPopupShow"
-      @click-close="isPopupShow=false"
+      @click-post="inputComment"
       />
     </van-popup>
 
@@ -93,9 +93,11 @@
       position="bottom"
       :style="{ height: '80%' }"
       @click-reply="isReplyShow=true"
-      @click-close="isReplyShow=false"
     >
-      <comment-reply :comment="curComment" v-if="isReplyShow" />
+      <comment-reply
+       :comment="curComment"
+       :articleId="articleId"
+       v-if="isReplyShow" />
     </van-popup>
 
     <!-- 底部标签栏 -->
@@ -140,7 +142,7 @@ import { addFollow, deleteFollow } from '@/api/user'
 import CommentItem from '@/components/article/comment-item'
 import PostComment from '@/components/article/post-comment'
 import CommentReply from '@/components/article/comment-reply'
-import { getComments } from '@/api/comment'
+import { getComments, addComments } from '@/api/comment'
 
 export default {
   name: 'ArticlePage',
@@ -169,10 +171,30 @@ export default {
       },
       isPopupShow: false,
       isReplyShow: false,
-      curComment: {}
+      curComment: {},
+      inputMessage: ''
     }
   },
   methods: {
+    // 发布评论
+    async inputComment (val) {
+      const articleComment = this.articleComment
+      this.inputMessage = val
+      if (!this.inputMessage.length) {
+        return
+      }
+      const { data } = await addComments({
+        target: this.articleId,
+        content: this.inputMessage
+      })
+      this.isPopupShow = false
+
+      articleComment.list.unshift(data.data.new_obj)
+
+      articleComment.totalCount++
+
+      this.inputMessage = ''
+    },
     // 获取文章评论
     async onLoad () {
       // 获取数据

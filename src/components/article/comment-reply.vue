@@ -25,17 +25,41 @@
       />
     </van-list>
 
+    <!-- 底部区域 -->
+    <div class="footer">
+      <van-button
+       class="write-btn"
+       type="default"
+       round
+       size="small"
+       @click="isPostShow=true"
+      >
+        写评论
+      </van-button>
+    </div>
+
+    <!-- 弹窗写评论 -->
+    <van-popup
+     v-model="isPostShow"
+     position="bottom"
+    >
+      <post-comment v-model="postMessage" @click-post="onPost"/>
+    </van-popup>
   </div>
 </template>
-
 <script>
-import { getComments } from '@/api/comment'
+import { getComments, addComments } from '@/api/comment'
 import CommentItem from '@/components/article/comment-item'
+import PostComment from '@/components/article/post-comment'
 export default {
   name: 'CommentReply',
   props: {
     comment: {
       type: Object,
+      required: true
+    },
+    articleId: {
+      type: [Object, Number, String],
       required: true
     }
   },
@@ -45,11 +69,14 @@ export default {
       loading: false,
       finished: false,
       offset: null,
-      limit: 10
+      limit: 10,
+      isPostShow: false,
+      postMessage: ''
     }
   },
   components: {
-    CommentItem
+    CommentItem,
+    PostComment
   },
   methods: {
     async onLoad () {
@@ -74,6 +101,31 @@ export default {
       } else {
         this.finished = true
       }
+    },
+    async onPost (val) {
+      this.postMessage = val
+      if (!this.postMessage) {
+        return
+      }
+      this.$toast.loading({
+        duration: 0,
+        message: '发布中。。。',
+        forbidClick: true
+      })
+      try {
+        const { data } = await addComments({
+          target: this.comment.com_id.toString(),
+          content: this.postMessage,
+          art_id: this.articleId.toString()
+        })
+        this.isPostShow = false
+        this.list.unshift(data.data.new_obj)
+        this.comment.reply_count++
+        this.postMessage = ''
+        this.$toast.success('发布成功！')
+      } catch (error) {
+        this.$toast.fail('发布失败')
+      }
     }
   }
 }
@@ -91,6 +143,22 @@ export default {
           color: #3196fa;
         }
       }
+  }
+  .footer{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 44px;
+    border-top: 1px solid #d8d8d8;
+    background-color: #fff;
+    .write-btn{
+      width: 160px;
+    }
   }
 }
 
