@@ -11,7 +11,15 @@
           />
           <div class="my-login-title">
             <div class="title">{{user.name}}</div>
-            <van-button round size="mini" class="btn">申请认证</van-button>
+            <!-- <van-button round size="mini" class="btn">申请认证</van-button> -->
+            <van-button
+             round
+             size="mini"
+             class="btn"
+             @click="$router.push('/user')"
+            >
+             编辑资料
+            </van-button>
           </div>
         </div>
         <van-grid :border="false" :column-num="4">
