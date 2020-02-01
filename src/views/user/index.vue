@@ -27,13 +27,17 @@
      v-model="isEditName"
      position="bottom"
     >
-      <edit-name></edit-name>
+      <edit-name
+       :name='user.name'
+       @close="isEditName=false"
+       @confirm="onSave"
+      />
     </van-popup>
   </div>
 </template>
 
 <script>
-import { getUserProfile } from '@/api/user'
+import { getUserProfile, editUserProfile } from '@/api/user'
 import EditName from '@/components/user/edit-name'
 export default {
   name: 'user',
@@ -54,6 +58,27 @@ export default {
       } catch (error) {
         this.$toast('数据获取失败！')
       }
+    },
+    async saveProfile (field, value) {
+      this.$toast.loading({
+        duration: 0,
+        message: '更新中',
+        forbidClick: true
+      })
+      try {
+        await editUserProfile({
+          [field]: value
+        })
+        this.$toast.success('更新成功！')
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('用户昵称更新失败')
+      }
+    },
+    async onSave (name) {
+      await this.saveProfile('name', name)
+      this.user.name = name
+      this.isEditName = false
     }
   },
   created () {

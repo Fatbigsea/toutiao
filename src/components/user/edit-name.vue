@@ -4,10 +4,13 @@
       title="编辑名字"
       left-text="取消"
       right-text="确定"
+      @click-left="$emit('close')"
+      @click-right="$emit('confirm',message)"
     />
     <van-field
      class="field"
-     v-model="name"
+     :value="name"
+     @input="message=$event"
      label="昵称"
      placeholder="请输入昵称"
      rows="2"
@@ -24,7 +27,13 @@ export default {
   name: 'EditName',
   data () {
     return {
-      name: ''
+      message: ''
+    }
+  },
+  props: {
+    name: {
+      type: String,
+      default: ''
     }
   }
 }
