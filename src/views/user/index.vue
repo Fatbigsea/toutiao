@@ -36,8 +36,14 @@
         @cancel="isEditGender=false"
         @select="onSelectGender"
       />
-      <van-cell title="生日" :value="user.birthday" is-link />
+      <van-cell
+        title="生日"
+        :value="user.birthday"
+        is-link
+        @click="isEditBirthday=true"
+      />
     </van-cell-group>
+    <!-- 编辑昵称 -->
     <van-popup
      v-model="isEditName"
      position="bottom"
@@ -48,12 +54,28 @@
        @confirm="onSaveName"
       />
     </van-popup>
+
+    <!-- 编辑生日 -->
+    <van-popup
+      v-model="isEditBirthday"
+      position="bottom"
+    >
+      <van-datetime-picker
+        v-model="currentDate"
+        type="date"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @cancel="isEditBirthday=false"
+        @confirm="onSelectBirthday"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserProfile, editUserProfile } from '@/api/user'
 import EditName from '@/components/user/edit-name'
+import moment from 'moment'
 export default {
   name: 'user',
   data () {
@@ -61,10 +83,14 @@ export default {
       user: {},
       isEditName: false,
       isEditGender: false,
+      isEditBirthday: false,
       actions: [
         { name: '男', value: 0 },
         { name: '女', value: 1 }
-      ]
+      ],
+      currentDate: new Date(),
+      minDate: new Date(1980, 0, 1),
+      maxDate: new Date()
     }
   },
   components: {
@@ -104,6 +130,12 @@ export default {
       await this.saveProfile('gender', value)
       this.user.gender = value
       this.isEditGender = false
+    },
+    async onSelectBirthday (value) {
+      value = moment(value).format('YYYY-MM-DD')
+      await this.saveProfile('birthday', value)
+      this.user.birthday = value
+      this.isEditBirthday = false
     }
   },
   created () {
