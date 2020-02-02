@@ -11,7 +11,6 @@
      class="field"
      :value="name"
      @input="message=$event"
-     label="昵称"
      placeholder="请输入昵称"
      rows="2"
      autosize

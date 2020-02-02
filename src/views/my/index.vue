@@ -71,7 +71,7 @@
       <van-cell class="cell" title="消息通知" is-link  />
       <van-cell class="cell" title="实名认证" is-link  />
       <van-cell class="cell" title="用户反馈" is-link  />
-      <van-cell class="cell" title="小智同学" is-link  />
+      <van-cell class="cell" title="小智同学" is-link @click="$router.push('/user/chat')"  />
       <van-cell class="cell" title="系统设置" is-link  />
     </van-cell-group>
 
