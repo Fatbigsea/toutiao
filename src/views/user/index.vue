@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { getUserProfile, editUserProfile } from '@/api/user'
+import { getUserProfile, editUserProfile, editUserPhoto } from '@/api/user'
 import EditName from '@/components/user/edit-name'
 import moment from 'moment'
 export default {
@@ -164,19 +164,35 @@ export default {
       this.user.birthday = value
       this.isEditBirthday = false
     },
-    // 头像
+    // 头像，点击弹出上传框
     onSelectImg () {
       this.file.click()
     },
+    // 选择图片并预览
     onImgChange () {
-      console.log('头像选择了')
       const fileObj = this.file.files[0]
       const fileData = URL.createObjectURL(fileObj)
       this.images = [fileData]
       this.isEditImg = true
     },
-    onImgConfirm () {
-      console.log('头像确定')
+    // 点击确实头像上传
+    async onImgConfirm () {
+      this.$toast.loading({
+        duration: 0,
+        message: '更新中。。。',
+        forbidClick: true
+      })
+      try {
+        const fd = new FormData()
+        fd.append('photo', this.file.files[0])
+        const { data } = await editUserPhoto(fd)
+        this.user.photo = data.data.photo
+        this.$toast.success('更新成功')
+        this.isEditImg = false
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('更新失败')
+      }
     }
   },
   created () {
