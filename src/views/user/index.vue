@@ -63,7 +63,7 @@
       position="bottom"
     >
       <van-datetime-picker
-        v-model="currentDate"
+        :value="currentDate"
         type="date"
         :min-date="minDate"
         :max-date="maxDate"
@@ -106,7 +106,6 @@ export default {
         { name: '男', value: 0 },
         { name: '女', value: 1 }
       ],
-      currentDate: new Date(),
       minDate: new Date(1980, 0, 1),
       maxDate: new Date(),
       images: []
@@ -118,6 +117,9 @@ export default {
   computed: {
     file () {
       return this.$refs['file']
+    },
+    currentDate () {
+      return new Date(this.user.birthday)
     }
   },
   methods: {
