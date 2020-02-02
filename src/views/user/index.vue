@@ -6,7 +6,7 @@
        @click-left="$router.back()"
     />
     <van-cell-group>
-      <van-cell title="头像" is-link>
+      <van-cell title="头像" is-link @click="onSelectImg">
         <van-image
           width="30"
           height="30"
@@ -14,12 +14,14 @@
           :src="user.photo"
         />
       </van-cell>
+      <!-- 编辑头像，文件上传 -->
+      <input type="file" hidden @change="onImgChange" ref="file">
+
       <van-cell
        title="昵称"
        :value="user.name"
        is-link
        @click="isEditName=true" />
-      <!-- <van-cell title="介绍" value="hello world" is-link /> -->
       <van-cell
        title="性别"
        :value="user.gender===1?'女':'男'"
@@ -96,6 +98,11 @@ export default {
   components: {
     EditName
   },
+  computed: {
+    file () {
+      return this.$refs['file']
+    }
+  },
   methods: {
     async userProfile () {
       try {
@@ -121,21 +128,32 @@ export default {
         this.$toast.fail('更新失败')
       }
     },
+    // 昵称
     async onSaveName (name) {
       await this.saveProfile('name', name)
       this.user.name = name
       this.isEditName = false
     },
+    // 性别
     async onSelectGender ({ value }) {
       await this.saveProfile('gender', value)
       this.user.gender = value
       this.isEditGender = false
     },
+    // 生日
     async onSelectBirthday (value) {
       value = moment(value).format('YYYY-MM-DD')
       await this.saveProfile('birthday', value)
       this.user.birthday = value
       this.isEditBirthday = false
+    },
+    // 头像
+    onSelectImg () {
+      console.log('选择头像')
+      this.file.click()
+    },
+    onImgChange () {
+      console.log('头像选择了')
     }
   },
   created () {
