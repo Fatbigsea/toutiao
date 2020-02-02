@@ -8,9 +8,9 @@
   <!-- 消息列表 -->
   <div class="message-list" ref="message-list">
     <div class="message-item"
-      v-for="(item,index) in 20"
+      v-for="(item,index) in chatMessage"
       :key="index"
-      :class="{ reverse: index % 2 === 0 }"
+      :class="{ reverse: item.isMe }"
     >
       <van-image
        class="avatar"
@@ -21,26 +21,63 @@
        src="https://img.yzcdn.cn/vant/cat.jpeg"
       />
       <div class="title">
-        <span>{{`hello${index}`}}</span>
+        <span>{{item.msg}}</span>
       </div>
     </div>
   </div>
 
   <!-- 发送消息 -->
   <van-cell-group class="send-message">
-    <van-field v-model="message" center clearable="" >
-      <van-button slot="button" size="small" type="primary">发送</van-button>
+    <van-field v-model="message" center clearable >
+      <van-button
+        slot="button"
+        size="small"
+        type="primary"
+        @click="onSend"
+      >发送</van-button>
     </van-field>
   </van-cell-group>
   </div>
 </template>
 
 <script>
+import io from 'socket.io-client'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'UserChat',
   data () {
     return {
-      message: ''
+      message: '',
+      chatMessage: getItem('chat-message') || [],
+      socket: null
+    }
+  },
+  watch: {
+    chatMessage (val) {
+      setItem('chat-message', val)
+    }
+  },
+  created () {
+    const socket = io('http://ttapi.research.itcast.cn')
+    this.socket = socket
+    socket.on('message', data => {
+      this.chatMessage.push(data)
+    })
+  },
+  methods: {
+    onSend () {
+      const message = this.message
+      if (!message) {
+        return
+      }
+      const data = {
+        msg: message,
+        timestamp: Date.now()
+      }
+      this.socket.emit('message', data)
+      data.isMe = true
+      this.chatMessage.push(data)
+      this.message = ''
     }
   }
 
@@ -57,6 +94,13 @@ export default {
     left: 0;
     box-sizing: border-box;
     background: #f5f5f6;
+    .van-nav-bar {
+      z-index: 1;
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+    }
     .message-list {
       height: 100%;
       overflow-y: scroll;
