@@ -14,7 +14,7 @@
           :src="user.photo"
         />
       </van-cell>
-      <!-- 编辑头像，文件上传 -->
+      <!-- 编辑头像，文件上传 change只有图片改变时才会触发 -->
       <input type="file" hidden @change="onImgChange" ref="file">
 
       <van-cell
@@ -71,6 +71,21 @@
         @confirm="onSelectBirthday"
       />
     </van-popup>
+
+    <!-- 头像预览 -->
+    <van-image-preview
+     v-model="isEditImg"
+     :images="images"
+     @close="file.value = ''"
+    >
+      <van-nav-bar
+        slot="cover"
+        left-text="取消"
+        right-text="确认"
+        @click-left="isEditImg = false"
+        @click-right="onImgConfirm"
+      />
+    </van-image-preview>
   </div>
 </template>
 
@@ -86,13 +101,15 @@ export default {
       isEditName: false,
       isEditGender: false,
       isEditBirthday: false,
+      isEditImg: false,
       actions: [
         { name: '男', value: 0 },
         { name: '女', value: 1 }
       ],
       currentDate: new Date(),
       minDate: new Date(1980, 0, 1),
-      maxDate: new Date()
+      maxDate: new Date(),
+      images: []
     }
   },
   components: {
@@ -149,11 +166,17 @@ export default {
     },
     // 头像
     onSelectImg () {
-      console.log('选择头像')
       this.file.click()
     },
     onImgChange () {
       console.log('头像选择了')
+      const fileObj = this.file.files[0]
+      const fileData = URL.createObjectURL(fileObj)
+      this.images = [fileData]
+      this.isEditImg = true
+    },
+    onImgConfirm () {
+      console.log('头像确定')
     }
   },
   created () {
@@ -163,6 +186,17 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
+::v-deep .van-image-preview__cover {
+  top: unset;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  .van-nav-bar {
+    background: #181818;
+    .van-nav-bar__text, .van-nav-bar__right {
+      color: #fff;
+    }
+  }
+}
 </style>
