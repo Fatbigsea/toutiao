@@ -55,6 +55,10 @@ export default {
   watch: {
     chatMessage (val) {
       setItem('chat-message', val)
+      const messageList = this.$refs['message-list']
+      this.$nextTick(() => {
+        messageList.scrollTop = messageList.scrollHeight
+      })
     }
   },
   created () {
