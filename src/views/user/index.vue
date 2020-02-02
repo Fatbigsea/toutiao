@@ -20,7 +20,22 @@
        is-link
        @click="isEditName=true" />
       <!-- <van-cell title="介绍" value="hello world" is-link /> -->
-      <van-cell title="性别" :value="user.gender===1?'女':'男'" is-link />
+      <van-cell
+       title="性别"
+       :value="user.gender===1?'女':'男'"
+       is-link
+       @click="isEditGender=true"
+      />
+
+      <!-- 编辑性别 -->
+      <van-action-sheet
+        v-model="isEditGender"
+        :actions="actions"
+        description="编辑性别"
+        cancel-text="取消"
+        @cancel="isEditGender=false"
+        @select="onSelectGender"
+      />
       <van-cell title="生日" :value="user.birthday" is-link />
     </van-cell-group>
     <van-popup
@@ -30,7 +45,7 @@
       <edit-name
        :name='user.name'
        @close="isEditName=false"
-       @confirm="onSave"
+       @confirm="onSaveName"
       />
     </van-popup>
   </div>
@@ -44,7 +59,12 @@ export default {
   data () {
     return {
       user: {},
-      isEditName: false
+      isEditName: false,
+      isEditGender: false,
+      actions: [
+        { name: '男', value: 0 },
+        { name: '女', value: 1 }
+      ]
     }
   },
   components: {
@@ -72,13 +92,18 @@ export default {
         this.$toast.success('更新成功！')
       } catch (error) {
         console.log(error)
-        this.$toast.fail('用户昵称更新失败')
+        this.$toast.fail('更新失败')
       }
     },
-    async onSave (name) {
+    async onSaveName (name) {
       await this.saveProfile('name', name)
       this.user.name = name
       this.isEditName = false
+    },
+    async onSelectGender ({ value }) {
+      await this.saveProfile('gender', value)
+      this.user.gender = value
+      this.isEditGender = false
     }
   },
   created () {
