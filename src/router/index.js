@@ -54,19 +54,21 @@ const routes = [
   }, {
     // 作品
     name: 'my-like',
-    path: '/my-like/article',
-    component: () => import('@/views/user-like')
-  }, {
-    // 历史
-    name: 'my-like-history',
-    path: '/my-like/history',
-    component: () => import('@/views/user-like')
-  }, {
-    // 收藏
-    name: 'my-like-collect',
-    path: '/my-like/collect',
-    component: () => import('@/views/user-like')
+    path: '/my-like/:type?',
+    component: () => import('@/views/user-like'),
+    props: true
   }
+  //  {
+  // 历史
+  //   name: 'my-like-history',
+  //   path: '/my-like/history',
+  //   component: () => import('@/views/user-like')
+  // }, {
+  //   // 收藏
+  //   name: 'my-like-collect',
+  //   path: '/my-like/collect',
+  //   component: () => import('@/views/user-like')
+  // }
 ]
 
 const router = new VueRouter({

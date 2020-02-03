@@ -26,14 +26,23 @@ import UserHistory from '@/components/user-like/history'
 export default {
   name: 'UserLike',
   data () {
+    let active = ['collect', 'history'].indexOf(this.type)
+    if (active === -1) {
+      active = 2
+    }
     return {
-      active: 0
+      active
     }
   },
   components: {
     UserArticle,
     UserCollect,
     UserHistory
+  },
+  props: {
+    type: {
+      type: String
+    }
   }
 
 }
