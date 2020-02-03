@@ -42,11 +42,11 @@
         </van-grid>
       </div>
       <van-grid clickable :column-num="3">
-        <van-grid-item icon="star-o" text="收藏">
+        <van-grid-item icon="star-o" text="收藏" to="/my-like/collect">
         </van-grid-item>
-        <van-grid-item icon="clock-o" text="历史">
+        <van-grid-item icon="clock-o" text="历史"  to="/my-like/history">
         </van-grid-item>
-        <van-grid-item icon="edit" text="作品">
+        <van-grid-item icon="edit" text="作品" to="/my-like/article">
         </van-grid-item>
       </van-grid>
     </div>
@@ -59,9 +59,9 @@
         </div>
       </div>
       <van-grid clickable :column-num="2">
-        <van-grid-item icon="star-o" text="收藏">
+        <van-grid-item icon="star-o" text="收藏" to="/my-like/collect">
         </van-grid-item>
-        <van-grid-item icon="clock-o" text="历史">
+        <van-grid-item icon="clock-o" text="历史" to="/my-like/history">
         </van-grid-item>
       </van-grid>
     </div>
