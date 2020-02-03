@@ -10,6 +10,12 @@
         v-for="(item,index) in list"
         :key="index"
         :title="item.title"
+        @click="$router.push({
+          name:'article',
+          params:{
+            articleId:item.art_id.toString()
+          }
+        })"
       />
     </van-list>
   </div>
