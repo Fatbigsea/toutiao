@@ -44,6 +44,15 @@ export default {
     type: {
       type: String
     }
+  },
+  // 我的收藏/历史/作品页面内的组件缓存
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'article') {
+      this.$store.commit('addCachePage', 'UserLike')
+    } else {
+      this.$store.commit('removeCachePage', 'UserLike')
+    }
+    next()
   }
 
 }
