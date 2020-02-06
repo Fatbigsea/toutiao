@@ -99,7 +99,7 @@ export default {
 
         // 跳转到来源页，没有跳转到首页
         const redirect = this.$route.query.redirect || '/'
-        this.$router.push(redirect)
+        this.$router.replace(redirect)
       } catch (error) {
         this.$toast.fail('登录失败,手机号或验证码错误')
       }
