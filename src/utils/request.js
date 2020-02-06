@@ -67,6 +67,11 @@ request.interceptors.response.use(function (response) {
 
 // 跳转到登录页面
 function redirectLogin () {
-  router.push('/login')
+  router.push({
+    name: 'login',
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
 }
 export default request

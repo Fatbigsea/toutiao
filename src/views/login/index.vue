@@ -93,12 +93,13 @@ export default {
         forbidClick: true
       })
       try {
-        // console.log(login())
-
-        const res = await login(this.user)
-        this.$store.commit('setUser', res.data.data)
+        const { data } = await login(this.user)
+        this.$store.commit('setUser', data.data)
         this.$toast.success('登录成功')
-        this.$router.push('/')
+
+        // 跳转到来源页，没有跳转到首页
+        const redirect = this.$route.query.redirect || '/'
+        this.$router.push(redirect)
       } catch (error) {
         this.$toast.fail('登录失败,手机号或验证码错误')
       }
