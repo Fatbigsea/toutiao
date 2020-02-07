@@ -14,10 +14,11 @@
     </van-nav-bar>
     <van-tabs v-model="activeName">
       <van-icon
-      name="wap-nav"
-      slot="nav-right"
-      class="wap-nav"
-      @click="isPopupShow = true" />
+        name="wap-nav"
+        slot="nav-right"
+        class="wap-nav"
+        @click="isPopupShow = true"
+      />
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         <ArticleList :channel="item"></ArticleList>
       </van-tab>
@@ -79,6 +80,7 @@ export default {
     }
   },
   created () {
+    this.getChannel()
     if (this.$store.state.user) {
       this.getChannel()
     }
